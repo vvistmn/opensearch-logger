@@ -3,8 +3,6 @@
 namespace Istmn\OpenSearchLogger;
 
 use Elasticsearch\ClientBuilder;
-use Illuminate\Log\Logger;
-use Illuminate\Log\LogManager;
 
 class OpenSearchLogger
 {
@@ -20,25 +18,20 @@ class OpenSearchLogger
         $this->index = $config['index'];
     }
 
-    public function __invoke(array $config)
+    public function log($level, $message, array $context = [])
     {
-        $handler = function ($level, $message, $context) {
-            $logData = [
-                'message' => $message,
-                'timestamp' => date('Y-m-d H:i:s'),
-                'level' => $level,
-            ];
+        $logData = [
+            'message' => $message,
+            'timestamp' => date('Y-m-d H:i:s'),
+            'level' => $level,
+            'context' => $context,
+        ];
 
-            $params = [
-                'index' => $this->index,
-                'body' => $logData,
-            ];
+        $params = [
+            'index' => $this->index,
+            'body' => $logData,
+        ];
 
-            $this->client->index($params);
-        };
-
-        return new Logger(
-            new LogManager(app()), app()->make('events')
-        );
+        $this->client->index($params);
     }
 }
