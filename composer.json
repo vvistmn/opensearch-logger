@@ -1,0 +1,21 @@
+{
+    "name": "istmn/opensearch-logger",
+    "description": "Отправка логов в OpenSearch",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Istmn\\OpensearchLogger\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Vladimir Istomin",
+            "email": "verdant24@yandex.ru"
+        }
+    ],
+    "require": {
+        "php": "^7.3",
+        "elasticsearch/elasticsearch": "^7.17"
+    }
+}
