@@ -1,6 +1,6 @@
 <?php
 
-namespace Istmn\OpensearchLogger;
+namespace Istmn\OpenSearchLogger;
 
 use Elasticsearch\ClientBuilder;
 use Illuminate\Log\Logger;

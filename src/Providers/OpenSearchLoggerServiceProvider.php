@@ -4,7 +4,7 @@ namespace Istmn\OpenSearchLogger\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Log\ParsesLogConfiguration;
-use Istmn\OpensearchLogger\OpenSearchLogger;
+use Istmn\OpenSearchLogger\OpenSearchLogger;
 use Monolog\Handler\PsrHandler;
 
 class OpenSearchLoggerServiceProvider extends ServiceProvider
