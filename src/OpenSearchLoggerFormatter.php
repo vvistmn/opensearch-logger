@@ -9,7 +9,7 @@ class OpenSearchLoggerFormatter
     public function __invoke($logger)
     {
         foreach ($logger->getHandlers() as $handler) {
-            $handler->pushProcessor(new CustomIntrospectionProcessor(Logger::DEBUG, ['Illuminate\\', 'App\\Services\\Logging\\']));
+            $handler->pushProcessor(new OpenSearchLoggerIntrospectionProcessor(Logger::DEBUG, ['Illuminate\\', 'App\\Services\\Logging\\']));
         }
     }
 }

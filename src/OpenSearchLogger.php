@@ -13,11 +13,11 @@ class OpenSearchLogger
      * @param  array  $config
      * @return \Monolog\Logger
      */
-    public function __invoke(Client $client)
+    public function __invoke(array $config)
     {
         // Создайте новый логгер Monolog и верните его
         $logger = new Logger('opensearch');
-        $logger->pushHandler(new OpenSearchHandler($client));
+        $logger->pushHandler(new OpenSearchHandler(app('opensearch')));
 
         return $logger;
     }

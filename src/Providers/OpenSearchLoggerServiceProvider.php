@@ -29,7 +29,7 @@ class OpenSearchLoggerServiceProvider extends ServiceProvider
     {
         // Создаем экземпляр клиента OpenSearch и регистрируем его в контейнере
         $this->app->singleton('opensearch', function ($app) {
-            $config = $app['config']['opensearch-logger'];
+            $config = $app['config']->get('opensearch-logger');
             return ClientBuilder::create()
                 ->setHosts([$config])
                 ->build();
