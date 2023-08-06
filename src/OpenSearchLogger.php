@@ -2,36 +2,23 @@
 
 namespace Istmn\OpenSearchLogger;
 
-use Elasticsearch\ClientBuilder;
+use Elasticsearch\Client;
+use Monolog\Logger;
 
 class OpenSearchLogger
 {
-    protected $client;
-    protected $index;
-
-    public function __construct(array $config)
+    /**
+     * Создайте единый метод для получения канала логирования
+     *
+     * @param  array  $config
+     * @return \Monolog\Logger
+     */
+    public function __invoke(Client $client)
     {
-        $this->client = ClientBuilder::create()
-            ->setHosts([$config['endpoint']])
-            ->build();
+        // Создайте новый логгер Monolog и верните его
+        $logger = new Logger('opensearch');
+        $logger->pushHandler(new OpenSearchHandler($client));
 
-        $this->index = $config['index'];
-    }
-
-    public function log($level, $message, array $context = [])
-    {
-        $logData = [
-            'message' => $message,
-            'timestamp' => date('Y-m-d H:i:s'),
-            'level' => $level,
-            'context' => $context,
-        ];
-
-        $params = [
-            'index' => $this->index,
-            'body' => $logData,
-        ];
-
-        $this->client->index($params);
+        return $logger;
     }
 }
