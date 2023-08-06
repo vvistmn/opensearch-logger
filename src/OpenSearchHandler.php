@@ -19,17 +19,15 @@ class OpenSearchHandler extends AbstractProcessingHandler
     protected function write(array $record): void
     {
         $data = [
+            'timestamp' => $record['datetime']->format('Y-m-d H:i:s'),
+            'level' => $record['level'],
             'message' => $record['message'],
-            // Добавьте дополнительные поля, которые вы хотите отправить
-            // 'timestamp' => $record['datetime']->format('Y-m-d H:i:s'),
-            // 'level' => $record['level'],
-            // ...
         ];
 
         // Отправьте данные в OpenSearch
         $this->client->index([
-            'index' => 'new_test_inged', // Замените на имя вашего индекса в OpenSearch
-            'type' => 'log', // Замените на тип вашего документа
+            'index' => config('opensearch-logger.index'),
+            'type' => 'log',
             'body' => $data,
         ]);
     }

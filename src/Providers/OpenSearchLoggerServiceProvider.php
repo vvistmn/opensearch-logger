@@ -16,10 +16,13 @@ class OpenSearchLoggerServiceProvider extends ServiceProvider
         ], 'config');
 
         // Получаем конфигурацию канала 'opensearch' из файла config/opensearch-logger.php
-        $opensearchChannelConfig = $this->app['config']->get('opensearch-logger.channel');
-        // Добавляем канал 'opensearch' в конфигурацию логирования
-        $this->app['config']->set('logging.channels.opensearch', $opensearchChannelConfig);
-
+        $opensearchChannelConfig = $this->app['config']->get('opensearch-logger.logging');
+        if (is_array($opensearchChannelConfig)) {
+            foreach ($opensearchChannelConfig as $code => $config) {
+                // Добавляем канал 'opensearch' в конфигурацию логирования
+                $this->app['config']->set("logging.channels.{$code}", $config);
+            }
+        }
     }
 
     public function register()
@@ -27,21 +30,9 @@ class OpenSearchLoggerServiceProvider extends ServiceProvider
         // Создаем экземпляр клиента OpenSearch и регистрируем его в контейнере
         $this->app->singleton('opensearch', function ($app) {
             $config = $app['config']['opensearch-logger'];
-            unset($config['channel']);
-
             return ClientBuilder::create()
-                ->setHosts(['http://127.0.0.1:9200']) // Укажите здесь адреса хостов OpenSearch
+                ->setHosts([$config])
                 ->build();
-        });
-
-        // Регистрируем кастомный канал логирования 'opensearch'
-        $this->app->bind('log.opensearch', function ($app) {
-            $client = $app['opensearch'];
-            return new OpenSearchLogger($client);
-        });
-
-        Log::extend('open-search', function ($app, array $config) {
-            return $app->make('open-search-logger');
         });
     }
 }
